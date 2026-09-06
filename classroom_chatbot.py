@@ -18,7 +18,6 @@ model = genai.GenerativeModel(
         "Hãy giải thích chi tiết, dễ hiểu, trình bày rõ ràng từng bước và dùng ngôn ngữ vui tươi, động viên học sinh."
     )
 )
-)
 
 # ==========================================
 # PHẦN 2: CẤU HÌNH GIAO DIỆN NGƯỜI DÙNG
