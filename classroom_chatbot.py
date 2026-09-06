@@ -66,10 +66,14 @@ if final_prompt:
     with st.chat_message("user", avatar="🎒"):
         st.markdown(final_prompt)
 
-    # Robot suy luận và trả lời
+   # Robot suy luận và trả lời
     with st.chat_message("assistant", avatar="🤖"):
         with st.spinner("Robot đang suy nghĩ câu trả lời..."):
+            try:
+                response = st.session_state.chat_session.send_message(final_prompt)
+                bot_reply = response.text
+                
+                st.markdown(bot_reply)
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply})
             except Exception as e:
-                # Hiển thị mã lỗi chi tiết từ Google để dễ gỡ lỗi
-                st.error(f"Lỗi chi tiết: {e}")
-                st.info("Robot đang kết nối lại với hệ thống AI, em hãy thử bấm gửi lại câu hỏi nhé!")
+                st.error(f"Lỗi kết nối AI: {e}")
