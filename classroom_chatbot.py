@@ -1,14 +1,16 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Lấy API Key an toàn từ Streamlit Secrets
+# ==========================================
+# PHẦN 1: CẤU HÌNH API VÀ AI
+# ==========================================
 try:
     GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=GEMINI_API_KEY)
 except Exception:
     st.error("Chưa cấu hình API Key trong mục Secrets của Streamlit Cloud!")
+    st.stop() # Dừng chạy ứng dụng nếu không có API key
 
-# Khởi tạo mô hình AI
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=(
@@ -17,12 +19,13 @@ model = genai.GenerativeModel(
     )
 )
 
-# 2. Cấu hình giao diện Streamlit
+# ==========================================
+# PHẦN 2: CẤU HÌNH GIAO DIỆN NGƯỜI DÙNG
+# ==========================================
 st.set_page_config(page_title="Robot Toán Học Lớp 5", page_icon="🤖")
 
 st.title("🤖 ROBOT TOÁN HỌC - BẠN ĐỒNG HÀNH LỚP 5")
 st.subheader("Học về: Khái niệm Số Thập Phân (Bài 10)")
-
 st.write("💡 **Gợi ý câu hỏi nhanh cho bạn:**")
 
 # Các nút gợi ý
@@ -41,7 +44,10 @@ with col2:
     if st.button("❓ Làm sao để đổi 1 kg thành tấn?"):
         prompt_selected = "Làm sao để đổi 1 kg thành tấn?"
 
-# 3. Lịch sử trò chuyện
+# ==========================================
+# PHẦN 3: KHỞI TẠO BỘ NHỚ (GIẢI QUYẾT LỖI CHAT_SESSION)
+# ==========================================
+# 3.1 Nhớ các tin nhắn hiển thị trên màn hình
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
@@ -50,30 +56,39 @@ if "messages" not in st.session_state:
         }
     ]
 
-# Hiển thị lịch sử chat
+# 3.2 Nhớ ngữ cảnh trò chuyện cho AI (Đoạn code bạn bị thiếu)
+if "chat_session" not in st.session_state:
+    st.session_state.chat_session = model.start_chat(history=[])
+
+# Hiển thị lại các tin nhắn cũ mỗi khi tải lại trang
 for message in st.session_state.messages:
     avatar = "🤖" if message["role"] == "assistant" else "🎒"
     with st.chat_message(message["role"], avatar=avatar):
         st.markdown(message["content"])
 
-# 4. Xử lý khi học sinh đặt câu hỏi
+# ==========================================
+# PHẦN 4: XỬ LÝ CÂU HỎI MỚI CỦA HỌC SINH
+# ==========================================
 user_input = st.chat_input("Viết câu hỏi của em tại đây...")
 final_prompt = prompt_selected or user_input
 
 if final_prompt:
-    # Hiển thị câu hỏi của học sinh
+    # 4.1 Hiển thị câu hỏi của học sinh lên màn hình
     st.session_state.messages.append({"role": "user", "content": final_prompt})
     with st.chat_message("user", avatar="🎒"):
         st.markdown(final_prompt)
 
-   # Robot suy luận và trả lời
+    # 4.2 Robot gửi câu hỏi cho AI và chờ trả lời
     with st.chat_message("assistant", avatar="🤖"):
         with st.spinner("Robot đang suy nghĩ câu trả lời..."):
             try:
+                # Gửi tin nhắn có kèm bộ nhớ
                 response = st.session_state.chat_session.send_message(final_prompt)
                 bot_reply = response.text
                 
+                # In ra câu trả lời và lưu vào lịch sử
                 st.markdown(bot_reply)
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
             except Exception as e:
+                # Báo lỗi chi tiết nếu mất kết nối
                 st.error(f"Lỗi kết nối AI: {e}")
