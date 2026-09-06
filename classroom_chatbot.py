@@ -1,12 +1,14 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Cấu hình khóa API Gemini AI
-# Dán API Key mới của bạn vào giữa 2 dấu ngoặc kép dưới đây
-GEMINI_API_KEY = "AQ.Ab8RN6Kc1aAOseG2qY_VWad7VnfDCojF6lGpn-HWumHOU_HcZA"
+# 1. Lấy API Key an toàn từ Streamlit Secrets
+try:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=GEMINI_API_KEY)
+except Exception:
+    st.error("Chưa cấu hình API Key trong mục Secrets của Streamlit Cloud!")
 
 # Khởi tạo mô hình AI
-genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=(
