@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Tiêu đề ứng dụng
-st.title("🤖 ROBOT TOÁN HỌC - KẾ ĐỒNG HÀNH LỚP 5")
+st.title("🤖 ROBOT TOÁN HỌC - BẠN ĐỒNG HÀNH LỚP 5")
 st.subheader("Học về: Khái niệm Số Thập Phân (Bài 10)")
 
 st.write("💡 **Gợi ý câu hỏi nhanh cho bạn:**")
@@ -12,14 +12,14 @@ col1, col2 = st.columns(2)
 prompt_selected = None
 
 with col1:
-    if st.button("❓ Số phân tích là gì vậy Robot?"):
-        prompt_selected = "Số phân tích là gì vậy Robot?"
-    if st.button("❓ Hãy chỉ chọn để tạo cấu hình của số 9,17?"):
-        prompt_selected = "Hãy chỉ chọn để tạo cấu hình của số 9,17?"
+    if st.button("❓ Số thập phân là gì vậy Robot?"):
+        prompt_selected = "Số thập phân là gì vậy Robot?"
+    if st.button("❓ Hãy cho biết cấu tạo của số 9,17?"):
+        prompt_selected = "Hãy cho biết cấu tạo của số 9,17?"
 
 with col2:
-    if st.button("❓ Làm sao để đổi 3,2 m thành mm?"):
-        prompt_selected = "Làm sao để đổi 3,2 m thành mm?"
+    if st.button("❓ Làm sao để đổi 32 mm thành m?"):
+        prompt_selected = "Làm sao để đổi 32 mm thành m?"
     if st.button("❓ Làm sao để đổi 1 kg thành tấn?"):
         prompt_selected = "Làm sao để đổi 1 kg thành tấn?"
 
@@ -38,7 +38,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Ô nhập câu hỏi
-user_input = st.chat_input("Import câu hỏi của em tại đây...")
+user_input = st.chat_input("Viết câu hỏi của em tại đây...")
 
 # Xử lý khi chọn nút hoặc nhập câu hỏi
 final_prompt = prompt_selected or user_input
