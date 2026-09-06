@@ -12,7 +12,7 @@ except Exception:
     st.stop() # Dừng chạy ứng dụng nếu không có API key
 
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash-latest",
+    model_name="gemini-pro",
     system_instruction=(
         "Bạn là Robot Toán Học thân thiện, kiên nhẫn, chuyên giảng dạy môn Toán cho học sinh lớp 5 tại Việt Nam. "
         "Hãy giải thích chi tiết, dễ hiểu, trình bày rõ ràng từng bước và dùng ngôn ngữ vui tươi, động viên học sinh."
